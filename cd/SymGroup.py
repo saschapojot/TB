@@ -2,13 +2,13 @@ import numpy as np
 
 def GetSpaceGroup(ParaIn):
     SGN  = ParaIn["SpaceGroupNumber"]
-    LvSG = ParaIn["SpaceGroupLatticeVector"]
+    LvSG = ParaIn["SpaceGroupLatticeVector"]#Bilbao matrix's basis  under Cartesian basis
     Lv   = ParaIn["LatticeVector"]
-    SymLvSG   = GetSymLvSG(SGN)
-    SymXyz, SymXyzt = GetSymXyz(SymLvSG,LvSG)
-    SymLv   = GetSymLv(SymXyzt,Lv)
-    SymOrb  = GetSymOrb(SymXyz)
-    SymSpn  = np.array([GetSymSpin(SymXyz[i]) for i in range(len(SymLvSG))],"complex")
+    SymLvSG   = GetSymLvSG(SGN)# space group operators under conventional unit cell basis
+    SymXyz, SymXyzt = GetSymXyz(SymLvSG,LvSG)#space group operators under Cartesian basis
+    SymLv   = GetSymLv(SymXyzt,Lv)#space group operators under primitive cell basis
+    SymOrb  = GetSymOrb(SymXyz)#Atomic orbitals transformed under space group operators
+    SymSpn  = np.array([GetSymSpin(SymXyz[i]) for i in range(len(SymLvSG))],"complex")#to be checked...
     ParaSym = {"SymLvSG": SymLvSG,
                "SymXyz":  SymXyz,
                "SymXyzt": SymXyzt,
@@ -41,15 +41,27 @@ def GetSymLvSG(SGN):
     return SGM
 
 def GetSymXyz(SymLvSG,LvSG):
+    """
+
+    :param SymLvSG: a tensor holding space group operators under conventional unit cell basis
+    :param LvSG: matrix relating conventional unit cell basis to Cartesian basis
+    :return: space group operators under Cartesian basis
+    """
     LvSGT = LvSG.T; LvSGTI = np.linalg.inv(LvSGT); NumSym = len(SymLvSG)
     SymXyzt = np.zeros((NumSym,3,4))
     for i in range(NumSym):
-        SymXyzt[i,:,:3] = LvSGT @ SymLvSG[i,:,:3] @ LvSGTI
+        SymXyzt[i,:,:3] = LvSGT @ SymLvSG[ i,:,:3] @ LvSGTI
         SymXyzt[i,:, 3] =         SymLvSG[i,:, 3] @ LvSG
     SymXyz  = SymXyzt[:,:,:3]
     return SymXyz, SymXyzt
 
 def GetSymLv(SymXyzt,Lv):
+    """
+
+    :param SymXyzt: space group operator under Cartesian basis
+    :param Lv: primitive unit cell basis
+    :return: space group operator under primitive unit cell basis
+    """
     LvT = Lv.T;LvI = np.linalg.inv(Lv);LvTI = np.linalg.inv(LvT); NumSym = len(SymXyzt)
     SymLv = np.zeros((NumSym,3,4))
     for i in range(NumSym):
@@ -105,6 +117,43 @@ def GetSymD(R):
     RD[4,4] = 1/2*(2*R_33**2-R_31**2-R_32**2 )
     
     return RD.T
+
+
+def GetSymD_LX(R):
+    [[R_00, R_01, R_02], [R_10, R_11, R_12], [R_20, R_21, R_22]] = R
+    RD = np.zeros((5, 5))
+    #
+    RD[0, 0] = R_00 * R_11 + R_10 * R_01
+    RD[0, 1] = R_01 * R_12 + R_11 * R_02
+    RD[0, 2] = R_02 * R_10 + R_12 * R_00
+    RD[0, 3] = 2 * R_00 * R_10 - 2 * R_01 * R_11
+    RD[0, 4] = 6 * R_02 * R_12
+    #
+    RD[1, 0] = R_10 * R_21 + R_20 * R_11
+    RD[1, 1] = R_11 * R_22 + R_21 * R_12
+    RD[1, 2] = R_12 * R_20 + R_22 * R_10
+    RD[1, 3] = 2 * R_10 * R_20 - 2 * R_11 * R_21
+    RD[1, 4] = 6 * R_12 * R_22
+    #
+    RD[2, 0] = R_00 * R_21 + R_20 * R_01
+    RD[2, 1] = R_01 * R_22 + R_21 * R_02
+    RD[2, 2] = R_02 * R_20 + R_22 * R_00
+    RD[2, 3] = 2 * R_00 * R_20 - 2 * R_01 * R_21
+    RD[2, 4] = 6 * R_02 * R_22
+    #
+    RD[3, 0] = 1 / 2 * R_00 * R_01 - 1 / 2 * R_10 * R_11
+    RD[3, 1] = 1 / 2 * R_01 * R_02 - 1 / 2 * R_11 * R_12
+    RD[3, 2] = 1 / 2 * R_02 * R_00 - 1 / 2 * R_12 * R_10
+    RD[3, 3] = 1 / 2 * (R_00 ** 2 - R_01 ** 2 - R_10 ** 2 + R_11 ** 2)
+    RD[3, 4] = 3 / 2 * (R_02 ** 2 - R_12 ** 2)
+    #
+    RD[4, 0] = -1 / 2 * R_00 * R_01 - 1 / 2 * R_10 * R_11
+    RD[4, 1] = -1 / 2 * R_01 * R_02 - 1 / 2 * R_11 * R_12
+    RD[4, 2] = -1 / 2 * R_02 * R_00 - 1 / 2 * R_12 * R_10
+    RD[4, 3] = 1 / 2 * (R_11 ** 2 + R_01 ** 2 - R_00 ** 2 - R_10 ** 2)
+    RD[4, 4] = 3 / 2 * R_22 ** 2 - 1 / 2
+
+    return RD
 
 def GetSymSpin(R,T=0):
     # This part refers to Ziyu's TB code.
