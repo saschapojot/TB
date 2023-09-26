@@ -31,11 +31,11 @@ def GetSymLvSG(SGN):
     return SGM
 
 NumSG0   = 230
-NumSGall = 4425
-NumSGunq = 786
+NumSGall = 4425# number of all matrices for 3d space groups
+NumSGunq = 786#number of unique matrices for 3d space groups
 
 # Collect all space group symmetries (4425)
-NumSG = np.zeros(230,int)
+NumSG = np.zeros(230,int)#number of matrices for each group
 SGall = np.zeros((4425,3,4))
 count = 0
 for i in range(1,230+1):
@@ -47,7 +47,7 @@ for i in range(1,230+1):
 
 # Find unique elements (786)
 SGunq = np.zeros((786,3,4))
-Indunq = np.zeros(4425,int)
+Indunq = np.zeros(4425,int)# index of repeated matrix in the list of unique matrices SGunq
 count = 0
 for i in range(4425):
     flag = 0
@@ -63,7 +63,7 @@ for i in range(4425):
 
 # Process Indunq
 '''
-Indices of matices in each space group
+Indices of matices for each group in the list SGunq
 SGind = 
 [[0],
  [0, 1],

@@ -28,7 +28,7 @@ from rw.WriteHmt import WriteHamiltonianReal
 from pl.PlotEB   import PlotEnergyBand
 from pl.PlotAt   import PlotAtoms
 
-#This is the demo program for Auh-17-2023
+#This is the demo program for Aug-17-2023
 #1. It reads config file containing information of the crystal,
 # the reader may give either a primitive cell or a conventional cell,
 # the program will compute primitive from conventional, or conventional from primitive.
