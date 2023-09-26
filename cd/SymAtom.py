@@ -101,7 +101,6 @@ def FindAtomSymmetry(ParaIn,ParaSym,ParaNbr):
             elif 1 - (iClas in ComInd[:,1]):
                 LvAtAtClasNew.append(LvAtAtClas[iClas])
         LvAtAtClas = LvAtAtClasNew
-
     
     # Output
     ParaSymAt = {"SymLvAtAtInd": SymLvAtAtInd,
