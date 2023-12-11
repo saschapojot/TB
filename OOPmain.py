@@ -10,7 +10,6 @@ plt.close("all")
 # lattice class
 # from lattice.baseLattice import baseLattice
 from lattice.superLattice import superLattice
-
 # Main
 # from cd.SymGroup import GetSpaceGroupPrimitive
 from cd.SymGroup import paraInPrim2Conv,conv2SGN,getParaSym
@@ -95,16 +94,15 @@ superCrystal=superLattice()
 superCrystal.ParaIn=ReadInput(inConfigName)
 superCrystal.checkSupercellInfoSanity()
 superCrystal.constructSuperLattice()
-superCrystal.constructSuperLattice()
 # Name=ParaIn["Name"]
 
 
 '''################### Determine space group of crystal ####################'''
 # ParaSym = GetSpaceGroupPrimitive(ParaIn)
-# atmUnderConvVector,atmIndsConv=paraInPrim2Conv(baseCrystal.ParaIn)
-# SGN, originBilbao=conv2SGN(baseCrystal.ParaIn,atmUnderConvVector,atmIndsConv)
-# baseCrystal.ParaSym=getParaSym(baseCrystal.ParaIn,SGN, originBilbao)
-# baseCrystal.ParaIn["origin Bilbao"]=baseCrystal.ParaSym["origin Bilbao"]
+atmUnderConvVector,atmIndsConv=paraInPrim2Conv(superCrystal.ParaIn)
+SGN, originBilbao=conv2SGN(superCrystal.ParaIn,atmUnderConvVector,atmIndsConv)
+superCrystal.ParaSym=getParaSym(superCrystal.ParaIn,SGN, originBilbao)
+superCrystal.ParaIn["origin Bilbao"]=superCrystal.ParaSym["origin Bilbao"]
 
 
 '''##################### Complete Electronic orbitals ######################'''
@@ -113,11 +111,11 @@ superCrystal.constructSuperLattice()
 
 '''################### Relate hopping terms by symmetry ####################'''
 # baseCrystal.ParaNbr    = FindNeighbor(baseCrystal.ParaIn)
-# # PlotAtoms(baseCrystal.ParaIn,baseCrystal.ParaNbr,baseCrystal.ParaIn["Name"])
+# PlotAtoms(baseCrystal.ParaIn,baseCrystal.ParaNbr,baseCrystal.ParaIn["Name"])
 # tFindingRelationStart=datetime.now()
 # baseCrystal.ParaSymAt  = FindAtomSymmetry(baseCrystal.ParaIn,baseCrystal.ParaSym,baseCrystal.ParaNbr)
 # baseCrystal.ParaRel    = FindRelation(baseCrystal.ParaIn,baseCrystal.ParaSym,baseCrystal.ParaNbr,baseCrystal.ParaSymAt)
-# # PlotHoppingTerm(baseCrystal.ParaIn,baseCrystal.ParaNbr,baseCrystal.ParaRel,baseCrystal.ParaIn["Name"],[5,6])
+# PlotHoppingTerm(baseCrystal.ParaIn,baseCrystal.ParaNbr,baseCrystal.ParaRel,baseCrystal.ParaIn["Name"],[5,6])
 # tFindingRelationEnd=datetime.now()
 # print("Finding symmetry relations: ",tFindingRelationEnd-tFindingRelationStart)
 # WriteRelation(baseCrystal.ParaIn,baseCrystal.ParaRel)
