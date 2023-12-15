@@ -139,16 +139,6 @@ class superLattice(baseLattice):
         self.superLatticeParaIn["OrbIdv"]=OrbIdv
         self.superLatticeParaIn["Folder"]=self.ParaIn["Folder"]+"/supercell/"
 
-
-
-
-
-
-
-
-
-
-
         return
 
     def map2RowNum(self,k,atm):
