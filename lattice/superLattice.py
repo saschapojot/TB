@@ -160,61 +160,61 @@ class superLattice(baseLattice):
 
         return
 
-    def array2Text(self,arr,arrName,fileName):
-        """
-        write array arr to text
-        :param arr: array
-        :param arrName: array's name
-        :param fileName: output file's name
-        :return:
-        """
-        if os.path.exists(fileName):
-            append_write = 'a+'  # append if already exists
-        else:
-            append_write = 'w+'  # make a new file if not
-        fptr=open(fileName,append_write)
-        fptr.write("\n")
-        fptr.write(arrName+":\n")
-        fptr.write("[")
-        count=0
-        for row in arr:
-            elemCount=0
-            fptr.write("[")
-            for v in row:
-                if elemCount<len(row)-1:
-                    fptr.write(str(v)+",")
-                    elemCount+=1
-                else:
-                    fptr.write(str(v)+"]")
-
-            if count<len(arr)-1:
-                fptr.write(",\n")
-            count+=1
-        fptr.write("]")
-        fptr.close()
-    def vec2Text(self,vec,vecName,fileName):
-        """
-        write vector vec to text
-        :param vec: vector
-        :param vecName: name of vector
-        :param fileName: output file
-        :return:
-        """
-        if os.path.exists(fileName):
-            append_write = 'a+'  # append if already exists
-        else:
-            append_write = 'w+'  # make a new file if not
-        fptr=open(fileName,append_write)
-        fptr.write("\n")
-        fptr.write(vecName + ":\n")
-        fptr.write("[\n")
-        count = 0
-        for v in vec:
-            if count<len(vec)-1:
-                fptr.write(str(v)+",")
-            else:
-                fptr.write(str(v)+"]")
-            count+=1
+    # def array2Text(self,arr,arrName,fileName):
+    #     """
+    #     write array arr to text
+    #     :param arr: array
+    #     :param arrName: array's name
+    #     :param fileName: output file's name
+    #     :return:
+    #     """
+    #     if os.path.exists(fileName):
+    #         append_write = 'a+'  # append if already exists
+    #     else:
+    #         append_write = 'w+'  # make a new file if not
+    #     fptr=open(fileName,append_write)
+    #     fptr.write("\n")
+    #     fptr.write(arrName+":\n")
+    #     fptr.write("[")
+    #     count=0
+    #     for row in arr:
+    #         elemCount=0
+    #         fptr.write("[")
+    #         for v in row:
+    #             if elemCount<len(row)-1:
+    #                 fptr.write(str(v)+",")
+    #                 elemCount+=1
+    #             else:
+    #                 fptr.write(str(v)+"]")
+    #
+    #         if count<len(arr)-1:
+    #             fptr.write(",\n")
+    #         count+=1
+    #     fptr.write("]")
+    #     fptr.close()
+    # def vec2Text(self,vec,vecName,fileName):
+    #     """
+    #     write vector vec to text
+    #     :param vec: vector
+    #     :param vecName: name of vector
+    #     :param fileName: output file
+    #     :return:
+    #     """
+    #     if os.path.exists(fileName):
+    #         append_write = 'a+'  # append if already exists
+    #     else:
+    #         append_write = 'w+'  # make a new file if not
+    #     fptr=open(fileName,append_write)
+    #     fptr.write("\n")
+    #     fptr.write(vecName + ":\n")
+    #     fptr.write("[\n")
+    #     count = 0
+    #     for v in vec:
+    #         if count<len(vec)-1:
+    #             fptr.write(str(v)+",")
+    #         else:
+    #             fptr.write(str(v)+"]")
+    #         count+=1
 
 
 

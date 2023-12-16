@@ -8,8 +8,8 @@ import sympy as smp
 
 plt.close("all")
 # lattice class
-# from lattice.baseLattice import baseLattice
-from lattice.superLattice import superLattice
+from lattice.baseLattice import baseLattice
+# from lattice.superLattice import superLattice
 # Main
 # from cd.SymGroup import GetSpaceGroupPrimitive
 from cd.SymGroup import paraInPrim2Conv,conv2SGN,getParaSym
@@ -64,8 +64,9 @@ from ck.CheckEigValSym import CheckEnergySymmetry as CheckE
 # the program will compute primitive from conventional, or conventional from primitive.
 #2. When the
 
-material = 'data/ABO3/supercell_TBIN_ABO3.txt'
+# material = 'data/ABO3/supercell_TBIN_ABO3.txt'
 # material = 'data/Graphene/primitive_TBIN_Graphene.txt'
+material="data/unknown/primitive_TBIN_unknown.txt"
 # material = 'data/h-BN/primitive_TBIN_h-BN.txt'
 # material = 'data/NaCl/primitive_TBIN_NaCl.txt'
 # material = 'data/Si/primitive_TBIN_Si.txt'
@@ -90,16 +91,37 @@ if not os.path.isfile(inConfigName):
 # inConfigFolder=pathlib.Path(inConfigName).parent
 # print(inConfigFolder)
 #read info
-superCrystal=superLattice()
+superCrystal=baseLattice()
 superCrystal.ParaIn=ReadInput(inConfigName)
-superCrystal.checkSupercellInfoSanity()
-superCrystal.constructSuperLattice()
+# superCrystal.checkSupercellInfoSanity()
+# superCrystal.constructSuperLattice()
 # Name=ParaIn["Name"]
 
 
 '''################### Determine space group of crystal ####################'''
 # ParaSym = GetSpaceGroupPrimitive(ParaIn)
 atmUnderConvVector,atmIndsConv=paraInPrim2Conv(superCrystal.ParaIn)
+# def checkIfRowsClose(arr):
+#     """
+#
+#     :param arr: array
+#     :return: check if there exist rows that are close
+#     """
+#     eps=1e-6
+#     for i in range(0,len(arr)-1):
+#         for j in range(i+1,len(arr)):
+#             if np.linalg.norm(arr[i]-arr[j],ord=2)<=eps:
+#                 print("row "+str(i)+" is close to row "+str(j)+".")
+
+
+# checkIfRowsClose(atmUnderConvVector)
+
+findsymIn=superCrystal.ParaIn["Folder"]+"/findsymIn.txt"
+superCrystal.array2Text(superCrystal.ParaIn["LvSG"],"LvSG",findsymIn)
+superCrystal.array2Text(atmUnderConvVector,"sitesInConv",findsymIn)
+superCrystal.vec2Text(atmIndsConv,"atmInds",findsymIn)
+
+
 SGN, originBilbao=conv2SGN(superCrystal.ParaIn,atmUnderConvVector,atmIndsConv)
 superCrystal.ParaSym=getParaSym(superCrystal.ParaIn,SGN, originBilbao)
 superCrystal.ParaIn["origin Bilbao"]=superCrystal.ParaSym["origin Bilbao"]
