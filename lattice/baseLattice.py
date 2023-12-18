@@ -188,7 +188,7 @@ class baseLattice:
             if count<len(arr)-1:
                 fptr.write("\n")
             count+=1
-        fptr.write("\n")
+        # fptr.write("]")
         fptr.close()
 
     def vec2Text(self,vec,vecName,fileName):
@@ -214,5 +214,4 @@ class baseLattice:
             else:
                 fptr.write(str(v)+"")
             count+=1
-        fptr.write("\n")
         fptr.close()

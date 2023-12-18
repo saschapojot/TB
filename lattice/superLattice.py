@@ -175,22 +175,22 @@ class superLattice(baseLattice):
     #     fptr=open(fileName,append_write)
     #     fptr.write("\n")
     #     fptr.write(arrName+":\n")
-    #     # fptr.write("[")
+    #     fptr.write("[")
     #     count=0
     #     for row in arr:
     #         elemCount=0
-    #         # fptr.write("[")
+    #         fptr.write("[")
     #         for v in row:
     #             if elemCount<len(row)-1:
-    #                 fptr.write(str(v)+" ")
+    #                 fptr.write(str(v)+",")
     #                 elemCount+=1
     #             else:
-    #                 fptr.write(str(v)+"")
+    #                 fptr.write(str(v)+"]")
     #
     #         if count<len(arr)-1:
-    #             fptr.write("\n")
+    #             fptr.write(",\n")
     #         count+=1
-    #     fptr.write("\n")
+    #     fptr.write("]")
     #     fptr.close()
     # def vec2Text(self,vec,vecName,fileName):
     #     """
@@ -207,16 +207,14 @@ class superLattice(baseLattice):
     #     fptr=open(fileName,append_write)
     #     fptr.write("\n")
     #     fptr.write(vecName + ":\n")
-    #     # fptr.write("[\n")
+    #     fptr.write("[\n")
     #     count = 0
     #     for v in vec:
     #         if count<len(vec)-1:
-    #             fptr.write(str(v)+" ")
+    #             fptr.write(str(v)+",")
     #         else:
-    #             fptr.write(str(v)+"")
+    #             fptr.write(str(v)+"]")
     #         count+=1
-    #     fptr.write("\n")
-    #     fptr.close()
 
 
 

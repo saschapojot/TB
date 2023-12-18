@@ -63,10 +63,10 @@ from ck.CheckEigValSym import CheckEnergySymmetry as CheckE
 # the reader may give either a primitive cell or a conventional cell,
 # the program will compute primitive from conventional, or conventional from primitive.
 #2. When the
-# material = 'data/Graphene/supercell_TBIN_Graphene.txt'
+
 # material = 'data/ABO3/supercell_TBIN_ABO3.txt'
-material = 'data/unknown/primitive_TBIN_unknown.txt'
 # material = 'data/Graphene/primitive_TBIN_Graphene.txt'
+material="data/unknown/primitive_TBIN_unknown.txt"
 # material = 'data/h-BN/primitive_TBIN_h-BN.txt'
 # material = 'data/NaCl/primitive_TBIN_NaCl.txt'
 # material = 'data/Si/primitive_TBIN_Si.txt'
@@ -91,7 +91,6 @@ if not os.path.isfile(inConfigName):
 # inConfigFolder=pathlib.Path(inConfigName).parent
 # print(inConfigFolder)
 #read info
-# superCrystal=superLattice()
 superCrystal=baseLattice()
 superCrystal.ParaIn=ReadInput(inConfigName)
 # superCrystal.checkSupercellInfoSanity()
@@ -102,10 +101,26 @@ superCrystal.ParaIn=ReadInput(inConfigName)
 '''################### Determine space group of supercrystal ####################'''
 
 atmUnderConvVector,atmIndsConv=paraInPrim2Conv(superCrystal.ParaIn)
-findsyin=superCrystal.ParaIn["Folder"]+"findsym.txt"
-superCrystal.array2Text(superCrystal.ParaIn["LvSG"],"LatticeVector",findsyin)
-superCrystal.array2Text(atmUnderConvVector,"AtomSite",findsyin)
-superCrystal.vec2Text(atmIndsConv,"Ind",findsyin)
+# def checkIfRowsClose(arr):
+#     """
+#
+#     :param arr: array
+#     :return: check if there exist rows that are close
+#     """
+#     eps=1e-6
+#     for i in range(0,len(arr)-1):
+#         for j in range(i+1,len(arr)):
+#             if np.linalg.norm(arr[i]-arr[j],ord=2)<=eps:
+#                 print("row "+str(i)+" is close to row "+str(j)+".")
+
+
+# checkIfRowsClose(atmUnderConvVector)
+
+findsymIn=superCrystal.ParaIn["Folder"]+"/findsymIn.txt"
+superCrystal.array2Text(superCrystal.ParaIn["LvSG"],"LvSG",findsymIn)
+superCrystal.array2Text(atmUnderConvVector,"sitesInConv",findsymIn)
+superCrystal.vec2Text(atmIndsConv,"atmInds",findsymIn)
+
 
 SGN, originBilbao=conv2SGN(superCrystal.ParaIn,atmUnderConvVector,atmIndsConv)
 
