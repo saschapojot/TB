@@ -4,6 +4,7 @@ import math
 
 # this script transforms a primitive cell to a conventional cell
 # TODO: values of errors (eps/epsXXX) to be rectified
+# TODO: we don't know yet how the tables are derived , there may exist problems of numerical stability
 
 def inputParametersInDegree2S(a, b, c, alpha, beta, gamma):
     """
