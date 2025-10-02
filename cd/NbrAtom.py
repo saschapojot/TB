@@ -4,13 +4,18 @@ def FindNeighbor(ParaIn):
     
     # Parameters
     Nbr  = ParaIn["NeighborNumber"]
+    print(f"Nbr={Nbr}")
     Lv   = ParaIn["LatticeVector"]#primitive cell vector
+    print(f"Lv={Lv}")
     AtLv = ParaIn["AtomSite"]
+    print(f"AtLv={AtLv}")
     originBilbao = ParaIn["origin Bilbao"]
+    print(f"originBilbao={originBilbao}")
     AtLv = [vec - originBilbao for vec in AtLv]  # shift origin
     N1, N2, N3 = Nbr
     NumLv = (2*N1+1)*(2*N2+1)*(2*N3+1)#cell number
     NumAt = len(AtLv)
+    print(f" N1, N2, N3={ N1, N2, N3}, NumLv={NumLv}, NumAt={NumAt}")
     
     # Find all atoms in [[-N1, N1],[-N2, N2],[-N3, N3]]
     LvAt = np.zeros((NumLv*NumAt,4),int)#[unitCelln1,unitCelln2,unitCelln3,atom]
@@ -35,6 +40,7 @@ def FindNeighbor(ParaIn):
     
     # Calculate the position of atoms in [0,0,0] cell
     AtXyz = AtLv @ Lv
+    print(f"AtXyz={AtXyz}")
 
     # Calculate the position of atoms in [[-N1, N1],[-N2, N2],[-N3, N3]]
     LvAtXyz = np.zeros((NumLv*NumAt,3))
