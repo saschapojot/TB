@@ -5,24 +5,35 @@ def CheckOrbitalCompleteness(ParaIn,ParaSym):
     
     # Parameters
     AtOrb        = ParaIn["AtomOrbital"]
+    print(f"len(AtOrb[0])={len(AtOrb[0])}, AtOrb={AtOrb}")
     OrbIdv       = ParaIn["OrbIdv"]
+    print(f"len(OrbIdv)={len(OrbIdv)}, OrbIdv={OrbIdv}")
     AtName       = ParaIn["AtomName"]
+    print(f"AtName={AtName}")
     AtNum        = ParaIn["AtomNumber"]
+    print(f"AtNum={AtNum}")
     SymOrb       = ParaSym["SymOrb"]
+    # print(f"SymOrb={SymOrb}")
     NumAtType, NumOrb = AtOrb.shape
+    print(f"NumAtType={NumAtType}, NumOrb={NumOrb}")
     NumSym = len(SymOrb[0])
     error = 1e-6
     
     # Write Symmetries acting on SPDF together
+    #s,p,d,f
     IndSPDF = np.array([1,1,3,1,3,5,1,3,5,7,1,3,5,7,1,3,5,7,1,3,5,7,1,3,5,7])
+    print(f"sum(IndSPDF)={sum(IndSPDF)}")
     SymSPDF = np.zeros((NumSym,94,94))
     count = 0
     for Indi in IndSPDF:
+        # print(f"Indi={Indi}")
         SymSPDF[:,count:count+Indi,count:count+Indi] = SymOrb[(Indi-1)//2]
         count += Indi
     
     # Classify symmetry-related orbitals by off-diagonal
+    print(f"AtOrb={AtOrb}")
     IndNonZero = np.sum(abs(SymSPDF),axis=0) > error # Nonzero off-diagnoal element in SymSPDF
+    # print(f"IndNonZero={IndNonZero}")
     AtOrbNew = np.copy(AtOrb)
     for iAt in range(NumAtType):
         IndOne = np.where(AtOrb[iAt])[0] # Input orbital

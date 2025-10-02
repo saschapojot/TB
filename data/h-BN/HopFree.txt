@@ -2,9 +2,9 @@
 0 0 0 0 0 pz pz
 0 0 0 1 1 py py
 1 0 0 1 0 py s
-1 1 0 0 0 s s
-1 1 0 0 0 pz pz
 1 1 0 1 1 px px
 1 1 0 1 1 py px
 1 1 0 1 1 py py
-1 1 0 0 1 s py
+1 1 0 0 0 s s
+1 1 0 0 0 pz pz
+1 1 0 1 0 py s

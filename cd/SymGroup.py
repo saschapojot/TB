@@ -415,9 +415,9 @@ def conv2SGN(ParaIn,atmUnderConvVector,atmIndsConv):
     """
 
     :param ParaIn:
-    :param atmUnderConvVector: atoms' positions under conventional cell basis
-    :param atmIndsConv: atom indices
-    :return: space group number of this crystal, origin of this crystal, by the convention of Bilbao's data
+    :param atmUnderConvVector:
+    :param atmIndsConv:
+    :return:
     """
 
     tFindSGNStart = datetime.now()
@@ -439,8 +439,11 @@ def getParaSym(ParaIn,SGN, originBilbao):
     LvSG=ParaIn["LvSG"]
     Lv = ParaIn["LatticeVector"]
     SymLvSG = GetSymLvSG(SGN)  # space group operators under conventional unit cell basis
+    print(f"SymLvSG[-1,:,:]={SymLvSG[-1,:,:]}")
     SymXyz, SymXyzt = GetSymXyz(SymLvSG, LvSG)  # space group operators under Cartesian basis
+    print(f"SymXyzt[-1,:,:]={SymXyzt[-1,:,:]}")
     SymLv = GetSymLv(SymXyzt, Lv)  # space group operators under primitive cell basis
+    print(f"SymLv[-1,:,:]={SymLv[-1,:,:]}")
     SymOrb = GetSymOrb(SymXyz)  # Atomic orbitals transformed under space group operators
     SymSpn = np.array([GetSymSpin(SymXyz[i]) for i in range(len(SymLvSG))], "complex")  # TODO: to be checked...
     ParaSym = {"SymLvSG": SymLvSG,

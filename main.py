@@ -62,7 +62,7 @@ from ck.CheckEigValSym import CheckEnergySymmetry as CheckE
 #2. When the
 
 # material = 'data/ABO3/primitive_TBIN_ABO3.txt'
-material = 'data/Graphene/primitive_TBIN_Graphene.txt'
+# material = 'data/Graphene/primitive_TBIN_Graphene.txt'
 material = 'data/h-BN/primitive_TBIN_h-BN.txt'
 # material = 'data/NaCl/primitive_TBIN_NaCl.txt'
 # material = 'data/Si/primitive_TBIN_Si.txt'
@@ -97,7 +97,7 @@ atmUnderConvVector,atmIndsConv=paraInPrim2Conv(ParaIn)
 SGN, originBilbao=conv2SGN(ParaIn,atmUnderConvVector,atmIndsConv)
 ParaSym=getParaSym(ParaIn,SGN, originBilbao)
 ParaIn["origin Bilbao"]=ParaSym["origin Bilbao"]
-
+# print(ParaIn)
 
 '''##################### Complete Electronic orbitals ######################'''
 ParaIn,ParaSym = CheckOrbital(ParaIn,ParaSym)
@@ -114,89 +114,90 @@ tFindingRelationEnd=datetime.now()
 print("Finding symmetry relations: ",tFindingRelationEnd-tFindingRelationStart)
 WriteRelation(ParaIn,ParaRel)
 
-
-'''################### Calculate real space Hamiltonian ####################'''
-# From hopping relations to Hamiltonian in real space
+#
+#
+# '''################### Calculate real space Hamiltonian ####################'''
+# # From hopping relations to Hamiltonian in real space
 HopValIn   = ReadHopping(ParaIn["Folder"]+"/HopValIN_"+ParaIn["Name"]+".txt")
 ParaRel    = ReadRelation(ParaIn["Folder"]+ "/HopRel.txt")
 HopValClas = GetHoppingValue(HopValIn, ParaRel)
 ParaHmtR   = GetHamiltonianReal(ParaRel,HopValClas)
 WriteHamiltonianReal(ParaIn, ParaHmtR)
-
-
-# '''###### Compute analytic forms of real space and k-space Hamiltonian #####'''
-# # Write analytic form of Hamiltonian
+#
+#
+# # '''###### Compute analytic forms of real space and k-space Hamiltonian #####'''
+# # # Write analytic form of Hamiltonian
+# # ParaHmtR   = ReadHamiltonianReal(ParaIn)
+# # ParaKptIn  = ReadKPoint(ParaIn["Folder"]+"/KptIN_" + Name + ".txt")
+# # ParaKpt    = GetKPoint(ParaKptIn)
+# # WriteHamiltonianAnalytic(ParaIn,ParaRel)#Hamiltonian in real space
+# # # Calculate energy bands from analytic form
+# # HkMatSp,k1,k2,k3,tValsSpAll=writeHkAnalytic(ParaIn,ParaRel,ParaHmtR)# H(k): Hamiltonian in k-space
+# # Hk2html(ParaIn,HkMatSp,ParaIn["Folder"])#write H(k) to html file
+# # pltSpEigs=plotEigsFromHkSp(HkMatSp,k1,k2,k3,tValsSpAll,ParaKpt,HopValIn,ParaRel,ParaIn["Folder"])
+# # # HkTmp=HkSp2Np(HkMatSp,k1,k2,k3,tValsSpAll,1,2,3,HopValIn)
+#
+#
+# '''######################## Calculate Energy Bands #########################'''
+# # From Hamiltonian in real space to Hamiltonian in k space
 # ParaHmtR   = ReadHamiltonianReal(ParaIn)
 # ParaKptIn  = ReadKPoint(ParaIn["Folder"]+"/KptIN_" + Name + ".txt")
 # ParaKpt    = GetKPoint(ParaKptIn)
-# WriteHamiltonianAnalytic(ParaIn,ParaRel)#Hamiltonian in real space
-# # Calculate energy bands from analytic form
-# HkMatSp,k1,k2,k3,tValsSpAll=writeHkAnalytic(ParaIn,ParaRel,ParaHmtR)# H(k): Hamiltonian in k-space
-# Hk2html(ParaIn,HkMatSp,ParaIn["Folder"])#write H(k) to html file
-# pltSpEigs=plotEigsFromHkSp(HkMatSp,k1,k2,k3,tValsSpAll,ParaKpt,HopValIn,ParaRel,ParaIn["Folder"])
-# # HkTmp=HkSp2Np(HkMatSp,k1,k2,k3,tValsSpAll,1,2,3,HopValIn)
-
-
-'''######################## Calculate Energy Bands #########################'''
-# From Hamiltonian in real space to Hamiltonian in k space
-ParaHmtR   = ReadHamiltonianReal(ParaIn)
-ParaKptIn  = ReadKPoint(ParaIn["Folder"]+"/KptIN_" + Name + ".txt")
-ParaKpt    = GetKPoint(ParaKptIn)
-ParaHmtK   = GetHamiltonianK(ParaHmtR,ParaKpt)
-# Solve the k-space Hamiltonian to get energy bands
-tEigStart=datetime.now()
-ParaEig    = GetEigenSolution(ParaHmtK)
-ParaEigPlt = PlotEnergyBand(ParaKpt,ParaEig,ParaIn["Folder"])
-tEigEnd=datetime.now()
-print(Name+ " enerygy band: ",tEigEnd-tEigStart)
-
-
-'''######### Check symmetry of Energy Bands and k-space Hamiltonian ########'''
-CheckE(ParaIn,ParaSym,ParaSymAt,ParaHmtR,0)
-CheckH(ParaIn,ParaSym,ParaSymAt,ParaHmtR)
-
-
-# '''####################### Calculate Berry Curvature #######################'''
-# # Read real space Hamiltonian and k points
-# ParaHmtR   = ReadHamiltonianReal(ParaIn)
-# ParaKptIn  = ReadKPoint(ParaIn["Folder"]+"/KptIN_" + Name + ".txt")
-# ParaKpt    = GetKPoint(ParaKptIn)
-# # Calculate Berry Curvature
-# ParaBerK = GetBerryK(ParaIn,ParaHmtR,ParaKpt)
-# ParaBerPlt = PlotBerryCurvature(ParaKpt,ParaBerK,ParaIn["Folder"])
-# '''This part needs an isolated test!'''
-
-
-# '''########### Calculate intrinsic anomalous Hall conductivity and 
-#                          intrinsic anomalous Nernst conductivity ###########'''
-# # Read real space Hamiltonian and input parameters (Temperature, Fermi Energy, nk)
-# ParaHmtR   = ReadHamiltonianReal(ParaIn)
-# ParaBerIn  = ReadBerryPara(ParaIn["Folder"]+ "/BerIN_" + Name + ".txt")
-# # Calculate intrinsic AHC & ANC
-# ParaAHNC = GetAHNC(ParaIn,ParaHmtR,ParaBerIn)
-# '''This part needs an isolated test!'''
-
-
-# '''###################### Calculate density of states ######################'''
-# # Read real space Hamiltonian and input parameters (method,nE,nk)
+# ParaHmtK   = GetHamiltonianK(ParaHmtR,ParaKpt)
+# # Solve the k-space Hamiltonian to get energy bands
+# tEigStart=datetime.now()
+# ParaEig    = GetEigenSolution(ParaHmtK)
+# ParaEigPlt = PlotEnergyBand(ParaKpt,ParaEig,ParaIn["Folder"])
+# tEigEnd=datetime.now()
+# print(Name+ " enerygy band: ",tEigEnd-tEigStart)
+#
+#
+# '''######### Check symmetry of Energy Bands and k-space Hamiltonian ########'''
+# CheckE(ParaIn,ParaSym,ParaSymAt,ParaHmtR,0)
+# CheckH(ParaIn,ParaSym,ParaSymAt,ParaHmtR)
+#
+#
+# # '''####################### Calculate Berry Curvature #######################'''
+# # # Read real space Hamiltonian and k points
+# # ParaHmtR   = ReadHamiltonianReal(ParaIn)
+# # ParaKptIn  = ReadKPoint(ParaIn["Folder"]+"/KptIN_" + Name + ".txt")
+# # ParaKpt    = GetKPoint(ParaKptIn)
+# # # Calculate Berry Curvature
+# # ParaBerK = GetBerryK(ParaIn,ParaHmtR,ParaKpt)
+# # ParaBerPlt = PlotBerryCurvature(ParaKpt,ParaBerK,ParaIn["Folder"])
+# # '''This part needs an isolated test!'''
+#
+#
+# # '''########### Calculate intrinsic anomalous Hall conductivity and
+# #                          intrinsic anomalous Nernst conductivity ###########'''
+# # # Read real space Hamiltonian and input parameters (Temperature, Fermi Energy, nk)
+# # ParaHmtR   = ReadHamiltonianReal(ParaIn)
+# # ParaBerIn  = ReadBerryPara(ParaIn["Folder"]+ "/BerIN_" + Name + ".txt")
+# # # Calculate intrinsic AHC & ANC
+# # ParaAHNC = GetAHNC(ParaIn,ParaHmtR,ParaBerIn)
+# # '''This part needs an isolated test!'''
+#
+#
+# # '''###################### Calculate density of states ######################'''
+# # # Read real space Hamiltonian and input parameters (method,nE,nk)
 # ParaHmtR   = ReadHamiltonianReal(ParaIn)
 # ParaDosIn  = ReadDosPara(ParaIn["Folder"]+ "/DosIN_" + Name + ".txt")
 # # Calculate DOS
 # ParaDos = GetDos(ParaIn,ParaHmtR,ParaDosIn)
 # ParaDosPlt = PlotDOS(ParaDos,ParaIn["Folder"])
-
-'''######################## Calculate info of strip ########################'''
-# Read real space Hamiltonian and input parameters (method,nE,nk)
-ParaHmtR   = ReadHamiltonianReal(ParaIn)
-ParaQcIn   = ReadQcPara(ParaIn["Folder"]+ "/QcIN_" + Name + ".txt")
-# Info of strip
-ParaStrip  = GetStrip(ParaIn,ParaHmtR,ParaQcIn)
-# Plot strip
-PlotAtomStrip(ParaStrip,ParaIn["Name"])
-# Calculate energy band
-ParaEigStrip = GetEigStrip(ParaStrip)
-PlotEnergyBand1D(ParaEigStrip,ParaIn["Folder"])
-# Calculate quantum conductance
-ParaQc     = GetQc(ParaQcIn,ParaStrip)
-PlotQuanCond(ParaQc,ParaIn["Folder"])
-'''This part is only tested with graphene & BN!'''
+#
+# '''######################## Calculate info of strip ########################'''
+# # Read real space Hamiltonian and input parameters (method,nE,nk)
+# ParaHmtR   = ReadHamiltonianReal(ParaIn)
+# ParaQcIn   = ReadQcPara(ParaIn["Folder"]+ "/QcIN_" + Name + ".txt")
+# # Info of strip
+# ParaStrip  = GetStrip(ParaIn,ParaHmtR,ParaQcIn)
+# # Plot strip
+# PlotAtomStrip(ParaStrip,ParaIn["Name"])
+# # Calculate energy band
+# ParaEigStrip = GetEigStrip(ParaStrip)
+# PlotEnergyBand1D(ParaEigStrip,ParaIn["Folder"])
+# # Calculate quantum conductance
+# ParaQc     = GetQc(ParaQcIn,ParaStrip)
+# PlotQuanCond(ParaQc,ParaIn["Folder"])
+# '''This part is only tested with graphene & BN!'''
